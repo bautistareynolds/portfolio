@@ -1,0 +1,12 @@
+# build / tooling noise
+node_modules
+bun.lock
+
+# browser test artifacts (gaggle-browser MCP)
+.playwright-mcp/
+
+# dev server temp
+__pycache__/
+
+# local agent environment
+.opencode/

@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    (() => {
+      try {
+        const q = new URLSearchParams(location.search);
+        const qt = q.get("theme");
+        const saved = localStorage.getItem("portfolio:theme");
+        const prefersLight = matchMedia("(prefers-color-scheme: light)").matches;
+        const t = qt === "light" || qt === "dark" ? qt : saved === "light" || saved === "dark" ? saved : prefersLight ? "light" : "dark";
+        document.documentElement.dataset.theme = t;
+        document.documentElement.style.colorScheme = t;
+
+        const ql = q.get("lang");
+        const savedLang = localStorage.getItem("portfolio:lang");
+        const nav = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"]).some(l => /^es\b|^-es\b/i.test(l));
+        const lang = ql === "en" || ql === "es" ? ql : savedLang === "en" || savedLang === "es" ? savedLang : nav ? "es" : "en";
+        document.documentElement.dataset.lang = lang;
+      } catch {}
+    })();
+  </script>
+  <style>
+    [data-lang="en"] .lang-es { display: none !important; }
+    [data-lang="es"] .lang-en { display: none !important; }
+  </style>
+  <meta name="description" content="Software Engineer — portfolio. Projects, security research, experience." />
+  <meta property="og:title" content="bautistareynolds — Software Engineer" />
+  <meta property="og:description" content="Software Engineer seeking roles. Projects, HackerOne, experience." />  <title>bautistareynolds — software engineer</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link id="variant-css" rel="stylesheet" href="css/variants/tui.css" />
+  <style>
+    .lang-subtle{ margin-top:10px; font-size:11.5px; color:var(--muted); border-top:1px solid var(--border); padding-top:10px; opacity:0.9; }
+    .lang-subtle span{ color:var(--text); }
+    #panel-contact .box:first-child .box-head{ font-size:13px; text-transform:none; letter-spacing:-0.02em; color:var(--text); font-weight:700; border-bottom:1px solid var(--border); padding-bottom:8px; }
+    .bounty-head{ display:flex; flex-wrap:wrap; gap:8px 16px; align-items:baseline; margin-bottom:12px; }
+    .bounty-total{ font-size:22px; font-weight:700; letter-spacing:-0.03em; }
+    .bounty-sub{ font-size:12px; color:var(--muted); }
+    .bounty-list{ list-style:none; padding:0; margin:0; display:grid; gap:0; border-top:1px solid var(--border); }
+    .bounty-list li{ display:flex; justify-content:space-between; gap:16px; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+    .bounty-list li:last-child{ border-bottom:none; }
+    .bounty-list .k{ color:var(--muted); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; min-width:56px; }
+    .bounty-list .v{ color:var(--text); text-align:right; }
+    .theme-toggle{ font:inherit; font-size:11px; padding:5px 10px; border-radius:999px; border:1px solid var(--border); background:var(--panel); color:var(--muted); cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+    .theme-toggle:hover{ color:var(--text); border-color:var(--border-strong); }
+    .theme-toggle .dot{ display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--muted); }
+    html[data-theme="dark"] .theme-toggle .dot{ background:var(--text); box-shadow:0 0 6px var(--text); }
+    html[data-theme="light"] .theme-toggle .dot{ background:#facc15; box-shadow:0 0 8px #facc15; }
+    .lang-toggle{ font:inherit; font-size:11px; padding:5px 10px; border-radius:999px; border:1px solid var(--border); background:var(--panel); color:var(--muted); cursor:pointer; display:inline-flex; align-items:center; gap:4px; letter-spacing:0.04em; }
+    .lang-toggle:hover{ color:var(--text); border-color:var(--border-strong); }
+    .lang-toggle .sep{ opacity:0.45; }
+    .copy-btn{ font:inherit; font-size:10.5px; padding:3px; border-radius:5px; border:1px solid var(--border); background:var(--panel); color:var(--muted); cursor:pointer; line-height:0; display:inline-flex; align-items:center; justify-content:center; margin-left:auto; flex:none; }
+    .copy-btn:hover{ color:var(--text); border-color:var(--border-strong); }
+    .copy-btn .copy-ico{ width:12px; height:12px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .copy-btn.is-copied{ color:var(--text); border-color:var(--border-strong); }
+    .contact-list li{ align-items:center; }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main"><span class="lang-en">skip to content</span><span class="lang-es">saltar al contenido</span></a>
+
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <a href="#about" class="brand-mark" aria-label="home">bautista reynolds</a>
+        <span class="brand-sub"><span class="lang-en">software engineer — available for work</span><span class="lang-es">ingeniero de software — disponible para trabajar</span></span>
+      </div>
+      <div class="header-actions" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <button type="button" id="lang-toggle" class="lang-toggle" aria-label="cambiar idioma / change language"><span class="lang-en">EN<span class="sep"> · </span>ES</span><span class="lang-es">EN<span class="sep"> · </span>ES</span></button>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="toggle theme" aria-pressed="false"><span class="dot" aria-hidden="true"></span><span class="label lang-en">dark</span><span class="label lang-es">oscuro</span></button>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="sections">
+        <button role="tab" aria-selected="true" aria-controls="panel-about" id="tab-about" data-tab="about"><span class="lang-en">// about</span><span class="lang-es">// sobre mí</span></button>
+        <button role="tab" aria-selected="false" aria-controls="panel-projects" id="tab-projects" data-tab="projects"><span class="lang-en">// projects</span><span class="lang-es">// proyectos</span></button>
+        <button role="tab" aria-selected="false" aria-controls="panel-security" id="tab-security" data-tab="security"><span class="lang-en">// security</span><span class="lang-es">// seguridad</span></button>
+        <button role="tab" aria-selected="false" aria-controls="panel-experience" id="tab-experience" data-tab="experience"><span class="lang-en">// experience</span><span class="lang-es">// experiencia</span></button>
+        <button role="tab" aria-selected="false" aria-controls="panel-contact" id="tab-contact" data-tab="contact"><span class="lang-en">// contact</span><span class="lang-es">// contacto</span></button>
+      </nav>
+      </header>
+
+    <main id="main">
+      <!-- ABOUT -->
+      <section id="panel-about" class="panel is-active" role="tabpanel" aria-labelledby="tab-about" data-panel="about">
+        <div class="panel-head">
+          <h1><span class="lang-en">About</span><span class="lang-es">Sobre mí</span></h1>
+          <p class="muted"><span class="lang-en">software engineer · systems · web · security-minded</span><span class="lang-es">ingeniero de software · sistemas · web · mentalidad de seguridad</span></p>
+        </div>
+
+        <div class="prose">
+          <div class="lang-en">
+            <p>
+              Hey — I'm a software engineer building backend systems and tools with
+              an attacker's eye for auth, access control, and trust boundaries. I spent time doing
+              bug bounties on <a href="https://hackerone.com" target="_blank" rel="noopener">HackerOne</a>
+              before focusing on full-stack and systems engineering full-time.
+            </p>
+            <p>
+              I recently completed a METI-sponsored internship in Sendai, Japan — more on that
+              under <a href="#experience" data-link="experience">experience</a>. Comfortable across backend,
+              frontend, and infra glue. NixOS daily-driver.
+            </p>
+          </div>
+          <div class="lang-es">
+            <p>
+              Hola — soy ingeniero de software enfocado en construir sistemas backend y herramientas con
+              la mirada analítica de seguridad para auth, control de acceso y límites de confianza. Pasé un tiempo
+              haciendo bug bounties en <a href="https://hackerone.com" target="_blank" rel="noopener">HackerOne</a>
+              antes de volcarme a la ingeniería full-stack y de sistemas a tiempo completo.
+            </p>
+            <p>
+              Recién terminé una pasantía patrocinada por METI en Sendai, Japón — más sobre eso en
+              <a href="#experience" data-link="experience">experiencia</a>. Me muevo con comodidad entre backend,
+              frontend y pegamento de infraestructura. Uso NixOS a diario.
+            </p>
+          </div>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta">
+            <span class="k"><span class="lang-en">location</span><span class="lang-es">ubicación</span></span>
+            <span class="v"><span class="lang-en">Buenos Aires, Argentina · remote / open to relocate</span><span class="lang-es">Buenos Aires, Argentina · remoto / dispuesto a mudarme</span></span>
+          </div>
+          <div class="meta">
+            <span class="k"><span class="lang-en">education</span><span class="lang-es">educación</span></span>
+            <span class="v"><span class="lang-en">B.S. Information Systems (Honors · 8.92/10)</span><span class="lang-es">Lic. en Sistemas de Información (Honores · 8.92/10)</span></span>
+          </div>
+          <div class="meta">
+            <span class="k"><span class="lang-en">focus</span><span class="lang-es">enfoque</span></span>
+            <span class="v"><span class="lang-en">backend, full-stack, tooling, security</span><span class="lang-es">backend, full-stack, tooling, seguridad</span></span>
+          </div>
+          <div class="meta">
+            <span class="k"><span class="lang-en">status</span><span class="lang-es">estado</span></span>
+            <span class="v"><span class="dot"></span> <span class="lang-en">seeking software engineer roles</span><span class="lang-es">buscando roles de ingeniero de software</span></span>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-head"><span class="lang-en">stack at a glance</span><span class="lang-es">stack de un vistazo</span></div>
+          <div class="tags">
+            <span>Python</span><span>Go</span><span>Linux</span><span>React</span><span>Docker</span><span>AWS</span>
+          </div>
+          <p class="hint"><span class="lang-en">Full per-project stack on the projects tab.</span><span class="lang-es">El stack completo por proyecto está en la pestaña de proyectos.</span></p>
+        </div>
+
+        <div class="links">
+          <a href="https://github.com/bautistareynolds" target="_blank" rel="noopener">[github]</a>
+          <a href="https://linkedin.com/in/bautistareynolds" target="_blank" rel="noopener">[linkedin]</a>
+          <a href="https://hackerone.com/bautistareynolds" target="_blank" rel="noopener">[hackerone]</a>
+          <a href="#contact" data-link="contact"><span class="lang-en">[contact]</span><span class="lang-es">[contacto]</span></a>
+          <a href="#projects" data-link="projects"><span class="lang-en">[projects →]</span><span class="lang-es">[proyectos →]</span></a>
+        </div>
+
+        <p class="lang-subtle"><span class="lang-en">Languages: <span>English</span> — fluent · <span>Spanish</span> — native</span><span class="lang-es">Idiomas: <span>inglés</span> — avanzado · <span>español</span> — nativo</span></p>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="panel-projects" class="panel" role="tabpanel" aria-labelledby="tab-projects" data-panel="projects" hidden>
+        <div class="panel-head">
+          <h2><span class="lang-en">Projects</span><span class="lang-es">Proyectos</span></h2>
+          <p class="muted"><span class="lang-en">selected github work — code, stack, architecture.</span><span class="lang-es">trabajo seleccionado en github — código, stack, arquitectura.</span></p>
+        </div>
+
+        <div class="grid">
+          <!-- ORCHID CARD -->
+          <article class="card">
+            <div class="card-head">
+              <h3><a class="host-link" href="https://github.com/bautistareynolds/orchid" target="_blank" rel="noopener">orchid</a></h3>
+            </div>
+            <p><span class="lang-en">Autonomous multi-agent execution &amp; verification platform. Orchestrates parallel sandboxed agents with stealth browser automation, centralized token-bucket traffic shaping, failover LLM routing, and live telemetry.</span><span class="lang-es">Plataforma autónoma de ejecución y verificación multi-agente. Orquesta agentes paralelos aislados con automatización de navegadores stealth, modelado de tráfico centralizado por token-bucket, ruteo resiliente de LLMs y telemetría en vivo.</span></p>
+            <div class="tags sm"><span>Python</span><span>FastAPI</span><span>Playwright</span><span>mitmproxy</span><span>Docker</span><span>Redis</span><span>Postgres</span><span>MCP</span></div>
+            <div class="card-links">
+              <a href="https://github.com/bautistareynolds/orchid" target="_blank" rel="noopener"><span class="lang-en">[source]</span><span class="lang-es">[código]</span></a>
+              <button type="button" class="btn-arch-modal" data-modal="modal-orchid">
+                <span class="lang-en">[architecture &amp; case study]</span><span class="lang-es">[arquitectura &amp; caso de estudio]</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- GAGGLE CARD -->
+          <article class="card">
+            <div class="card-head">
+              <h3><a class="host-link" href="https://gaggle.land" target="_blank" rel="noopener">gaggle</a></h3>
+            </div>
+            <p><span class="lang-en">Production Go + React social media platform with full auth, media handling, and real-time SSE updates. Provisioned via Terraform IaC on AWS EC2 with GitHub Actions CI/CD and automated TLS certbot renewals.</span><span class="lang-es">Plataforma de red social en Go + React en producción con auth completa, manejo de multimedia y actualizaciones en tiempo real (SSE). Aprovisionada con Terraform IaC sobre AWS EC2 con CI/CD en GitHub Actions y renovación automática de certificados TLS vía certbot.</span></p>
+            <div class="tags sm"><span>Go</span><span>React</span><span>TypeScript</span><span>Terraform</span><span>GitHub Actions</span><span>Postgres</span><span>Redis</span><span>Docker</span><span>AWS</span></div>
+            <div class="card-links">
+              <a href="https://github.com/bautistareynolds/gaggle" target="_blank" rel="noopener"><span class="lang-en">[source]</span><span class="lang-es">[código]</span></a>
+              <button type="button" class="btn-arch-modal" data-modal="modal-gaggle">
+                <span class="lang-en">[architecture &amp; CI/CD]</span><span class="lang-es">[arquitectura &amp; CI/CD]</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- HANDWRITTEN-DIGITS CARD -->
+          <article class="card">
+            <div class="card-head">
+              <h3><a class="host-link" href="https://github.com/bautistareynolds/handwritten-digits#readme" target="_blank" rel="noopener">handwritten-digits</a></h3>
+            </div>
+            <p><span class="lang-en">Handwritten digit recognition using a feed-forward neural network implemented from scratch in NumPy, trained on the MNIST dataset.</span><span class="lang-es">Reconocimiento de dígitos manuscritos mediante una red neuronal feed-forward implementada desde cero con NumPy y entrenada sobre el dataset MNIST.</span></p>
+            <div class="tags sm"><span>Python</span><span>NumPy</span><span>Machine Learning</span></div>
+            <div class="card-links"><a href="https://github.com/bautistareynolds/handwritten-digits" target="_blank" rel="noopener"><span class="lang-en">[source]</span><span class="lang-es">[código]</span></a></div>
+          </article>
+        </div>
+
+
+      </section>
+
+      <!-- SECURITY -->
+      <section id="panel-security" class="panel" role="tabpanel" aria-labelledby="tab-security" data-panel="security" hidden>
+        <div class="panel-head">
+          <h2><span class="lang-en">Security</span><span class="lang-es">Seguridad</span></h2>
+          <p class="muted"><span class="lang-en">bug bounty / application security — responsible disclosure only.</span><span class="lang-es">bug bounty / seguridad de aplicaciones — solo divulgación responsable.</span></p>
+        </div>
+
+        <div class="prose">
+          <p class="lang-en">
+            Bug bounties on <a href="https://hackerone.com/bautistareynolds" target="_blank" rel="noopener">HackerOne</a>
+            (<code>bautistareynolds</code>, same as GitHub) from 2022 to 2024 — all $7,600 earned on Reddit's program,
+            top 10 on their thanks page. Focus on web-app logic, auth, and input handling.
+            Most reports are private per program policy; totals below are disclosed earnings.
+          </p>
+          <p class="lang-es">
+            Bug bounties en <a href="https://hackerone.com/bautistareynolds" target="_blank" rel="noopener">HackerOne</a>
+            (<code>bautistareynolds</code>, igual que en GitHub) de 2022 a 2024 — los $7,600 fueron todos en el programa
+            de Reddit, top 10 en su página de agradecimientos. Me enfoco en la lógica de apps web,
+            auth y manejo de input. La mayoría de los reportes son privados por política del programa;
+            los totales de abajo son ganancias divulgadas.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="box-head"><span class="lang-en">bounties earned — reddit</span><span class="lang-es">bounties ganados — reddit</span></div>
+          <div class="bounty-head">
+            <span class="bounty-total">$7,600</span>
+            <span class="bounty-sub">all on Reddit · top 10 thanks</span>
+          </div>
+          <ul class="bounty-list" aria-label="bounty breakdown">
+            <li><span class="k sev-high">high</span> <span class="v">1 × $5,000 = $5,000</span></li>
+            <li><span class="k sev-medium">medium</span> <span class="v">4 × $500 = $2,000</span></li>
+            <li><span class="k sev-low">low</span> <span class="v">6 × $100 = $600</span></li>
+          </ul>
+          <div class="links" style="margin-top:10px">
+            <a href="https://hackerone.com/bautistareynolds" target="_blank" rel="noopener">[hackerone.com/bautistareynolds]</a>
+            <a href="https://hackerone.com/reddit/thanks" target="_blank" rel="noopener"><span class="lang-en">[reddit thanks — top 10]</span><span class="lang-es">[agradecimientos de reddit — top 10]</span></a>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-head"><span class="lang-en">focus areas</span><span class="lang-es">áreas de enfoque</span></div>
+          <ul class="list lang-en">
+            <li>web: auth, access control, IDOR, session handling</li>
+            <li>recon &amp; asset enumeration, endpoint discovery</li>
+            <li>input handling — XSS, SSRF, open redirect (validated, not theoretical)</li>
+            <li>report quality: clear repro steps, impact, suggested fix</li>
+          </ul>
+          <ul class="list lang-es">
+            <li>web: auth, control de acceso, IDOR, manejo de sesiones</li>
+            <li>recon &amp; enumeración de assets, descubrimiento de endpoints</li>
+            <li>manejo de input — XSS, SSRF, open redirect (validados, no teóricos)</li>
+            <li>calidad de reportes: pasos de reproducción claros, impacto, fix sugerido</li>
+          </ul>
+        </div>
+
+        <div class="box">
+          <div class="box-head"><span class="lang-en">approach</span><span class="lang-es">enfoque</span></div>
+          <p class="muted lang-en" style="margin:0">
+            No automated scanner spam. Manual review, reading JS, tracing data flow,
+            checking assumptions at trust boundaries. If a finding is out-of-scope, it stays out.
+          </p>
+          <p class="muted lang-es" style="margin:0">
+            Nada de spam de scanners automáticos. Revisión manual, leyendo JS,
+            trazando el flujo de datos, verificando suposiciones en los límites de confianza.
+            Si un hallazgo está fuera de scope, se queda fuera.
+          </p>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section id="panel-experience" class="panel" role="tabpanel" aria-labelledby="tab-experience" data-panel="experience" hidden>
+        <div class="panel-head">
+          <h2><span class="lang-en">Experience</span><span class="lang-es">Experiencia</span></h2>
+          <p class="muted"><span class="lang-en">work &amp; internships — most recent first.</span><span class="lang-es">trabajo &amp; pasantías — lo más reciente primero.</span></p>
+        </div>
+
+        <ol class="timeline">
+          <li class="tl">
+            <div class="tl-head">
+              <span class="tl-role"><span class="lang-en">Software Engineering Intern — Sendai, Japan</span><span class="lang-es">Pasante de Ingeniería de Software — Sendai, Japón</span></span>
+              <span class="tl-when"><span class="lang-en">Oct 2025 — Dec 2025 · 3 months</span><span class="lang-es">Oct 2025 — Dic 2025 · 3 meses</span></span>
+            </div>
+            <p class="muted lang-en">Selected from 15,000 applicants for a METI-sponsored technical internship at <a class="host-link" href="https://solanets.com" target="_blank" rel="noopener">Solacom</a> in Sendai. Worked on the scraping infrastructure behind their platform.</p>
+            <p class="muted lang-es">Seleccionado entre 15,000 postulantes para una pasantía técnica patrocinada por METI en <a class="host-link" href="https://solanets.com" target="_blank" rel="noopener">Solacom</a>, en Sendai. Trabajé en la infraestructura de scraping detrás de su plataforma.</p>
+            <ul class="list lang-en">
+              <li>Built and maintained production scraping pipelines — Python, Playwright, MongoDB.</li>
+              <li>Reverse-engineered undocumented Threads and Facebook GraphQL &amp; REST APIs, handling shifting persisted-query hashes and browser session tokens.</li>
+              <li>Engineered anti-automation countermeasures and rate-limiting mitigations across containerized Docker / AWS workers.</li>
+            </ul>
+            <ul class="list lang-es">
+              <li>Construí y mantuve pipelines de scraping en producción — Python, Playwright, MongoDB.</li>
+              <li>Ingeniería inversa de APIs REST y GraphQL no documentadas de Threads y Facebook, resolviendo hashes dinámicos de persisted queries y tokens de sesión.</li>
+              <li>Diseñé mitigaciones contra mecanismos anti-automatización y rate-limiting en workers containerizados con Docker y AWS.</li>
+            </ul>
+
+          </li>
+          <li class="tl">
+            <div class="tl-head">
+              <span class="tl-role"><span class="lang-en">Teaching Assistant — Universidad del Salvador</span><span class="lang-es">Ayudante de Cátedra — Universidad del Salvador</span></span>
+              <span class="tl-when"><span class="lang-en">2024</span><span class="lang-es">2024</span></span>
+            </div>
+            <p class="muted lang-en">Assisted faculty in undergraduate programming and computer science courses.</p>
+            <p class="muted lang-es">Asistí a la cátedra en cursos de programación y ciencias de la computación.</p>
+            <ul class="list lang-en">
+              <li>Mentored students in practical laboratory sessions, algorithms, and debugging.</li>
+              <li>Graded coding assignments, practical projects, and exam submissions with constructive feedback.</li>
+            </ul>
+            <ul class="list lang-es">
+              <li>Guié a estudiantes en prácticas de laboratorio, resolución de algoritmos y debugging.</li>
+              <li>Evalué y califiqué trabajos prácticos de programación, proyectos y exámenes con devoluciones constructivas.</li>
+            </ul>
+          </li>
+          <li class="tl">
+            <div class="tl-head">
+              <span class="tl-role"><span class="lang-en">Bug Bounty — HackerOne</span><span class="lang-es">Bug Bounty — HackerOne</span></span>
+              <span class="tl-when"><span class="lang-en">2022 — 2024</span><span class="lang-es">2022 — 2024</span></span>
+            </div>
+            <p class="muted lang-en">Independent security research. Triaged my own findings before they became someone else's incident.</p>
+            <p class="muted lang-es">Investigación de seguridad independiente. Triagié mis propios hallazgos antes de que se volvieran el incidente de alguien más.</p>
+            <ul class="list lang-en">
+              <li>Security research focused on authorization logic, access control, and API state handling.</li>
+              <li>Emphasis on reproducible proof-of-concept steps and clear remediation guidance.</li>
+            </ul>
+            <ul class="list lang-es">
+              <li>Investigación de seguridad enfocada en lógica de autorización, control de acceso y APIs.</li>
+              <li>Énfasis en pruebas de concepto reproducibles y recomendaciones claras de mitigación.</li>
+            </ul>
+          </li>
+        </ol>
+
+        <div class="box photo-section">
+          <div class="box-head"><span class="lang-en">photos — sendai, tokyo &amp; yamagata / japan</span><span class="lang-es">fotos — sendai, tokio y yamagata / japón</span></div>
+          <div class="gallery-container">
+            <div class="gallery" aria-label="photos from time in japan">
+            <figure>
+              <img src="assets/img/japan/kunimi-neighborhood.webp" alt="Kunimi neighborhood in Sendai" loading="lazy">
+              <figcaption class="muted"><span class="lang-en">Kunimi neighborhood — Sendai</span><span class="lang-es">Barrio de Kunimi — Sendai</span></figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/japan/shinjuku-gyoen.webp" alt="Shinjuku Gyoen National Garden in Tokyo" loading="lazy">
+              <figcaption class="muted"><span class="lang-en">Shinjuku Gyoen National Garden — Tokyo</span><span class="lang-es">Jardín Nacional Shinjuku Gyoen — Tokio</span></figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/japan/shinkansen-sendai-station.webp" alt="Shinkansen at Sendai Station" loading="lazy">
+              <figcaption class="muted"><span class="lang-en">Shinkansen at Sendai Station</span><span class="lang-es">Shinkansen en la estación de Sendai</span></figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/japan/kanda-shrine.webp" alt="Kanda Myojin shrine, Zuishin-mon main gate, Tokyo" loading="lazy">
+              <figcaption class="muted"><span class="lang-en">Kanda Myojin — Zuishin-mon gate, Tokyo</span><span class="lang-es">Kanda Myojin — puerta Zuishin-mon, Tokio</span></figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/japan/yamagata.webp" alt="Mountain valley landscape in Yamagata" loading="lazy">
+              <figcaption class="muted"><span class="lang-en">mountain valley landscape — Yamagata</span><span class="lang-es">paisaje del valle montañoso — Yamagata</span></figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/japan/with-the-team.webp" alt="The internship team and mentors in Tokyo" loading="lazy">
+              <figcaption class="muted"><span class="lang-en">with the internship team &amp; mentors — Tokyo</span><span class="lang-es">con el equipo de la pasantía y los mentores — Tokio</span></figcaption>
+            </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="panel-contact" class="panel" role="tabpanel" aria-labelledby="tab-contact" data-panel="contact" hidden>
+        <div class="panel-head">
+          <h2><span class="lang-en">Contact</span><span class="lang-es">Contacto</span></h2>
+          <p class="muted"><span class="lang-en">easiest way to reach me.</span><span class="lang-es">la forma más fácil de contactarme.</span></p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="box">
+            <div class="box-head"><span class="lang-en">reach me</span><span class="lang-es">encontrame en</span></div>
+            <ul class="contact-list">
+              <li><span class="k"><span class="lang-en">github</span><span class="lang-es">github</span></span> <a href="https://github.com/bautistareynolds" target="_blank" rel="noopener">github.com/bautistareynolds</a> <button type="button" class="copy-btn" data-copy="https://github.com/bautistareynolds" aria-label="copy github.com/bautistareynolds"><svg class="copy-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9h11a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></li>
+              <li><span class="k"><span class="lang-en">linkedin</span><span class="lang-es">linkedin</span></span> <a href="https://linkedin.com/in/bautistareynolds" target="_blank" rel="noopener">linkedin.com/in/bautistareynolds</a> <button type="button" class="copy-btn" data-copy="https://linkedin.com/in/bautistareynolds" aria-label="copy linkedin.com/in/bautistareynolds"><svg class="copy-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9h11a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></li>
+              <li><span class="k"><span class="lang-en">hackerone</span><span class="lang-es">hackerone</span></span> <a href="https://hackerone.com/bautistareynolds" target="_blank" rel="noopener">hackerone.com/bautistareynolds</a> <button type="button" class="copy-btn" data-copy="https://hackerone.com/bautistareynolds" aria-label="copy hackerone.com/bautistareynolds"><svg class="copy-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9h11a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></li>
+              <li><span class="k"><span class="lang-en">email</span><span class="lang-es">email</span></span> <a href="mailto:bautistaalvarezreynolds@gmail.com">bautistaalvarezreynolds@gmail.com</a> <button type="button" class="copy-btn" data-copy="bautistaalvarezreynolds@gmail.com" aria-label="copy email address"><svg class="copy-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9h11a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></li>
+              <li><span class="k">cv</span> <a href="cv-en.pdf" class="lang-en" download>cv-en.pdf</a><a href="cv-es.pdf" class="lang-es" download>cv-es.pdf</a></li>
+            </ul>
+          </div>
+          <div class="box">
+            <div class="box-head"><span class="lang-en">availability</span><span class="lang-es">disponibilidad</span></div>
+            <p style="margin:0" class="lang-en">Open to software engineer roles — backend, full-stack, platform. Remote or on-site. Happy to chat even if the fit isn't exact.</p>
+            <p style="margin:0" class="lang-es">Abierto a roles de ingeniero de software — backend, full-stack, plataforma. Remoto o presencial. Encantado de charlar aunque el fit no sea exacto.</p>
+            <p class="hint lang-en" style="margin-top:10px">Response time: usually within a day.</p>
+            <p class="hint lang-es" style="margin-top:10px">Tiempo de respuesta: normalmente en el día.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span class="muted"><span class="lang-en">© 2026 bautistareynolds</span><span class="lang-es">© 2026 bautistareynolds</span></span>
+      <span class="muted"><a href="https://github.com/bautistareynolds" target="_blank" rel="noopener">github.com/bautistareynolds</a></span>
+    </footer>
+  </div>
+
+  <!-- ARCHITECTURE DEEP-DIVE MODALS -->
+  <div id="modal-orchid" class="tech-modal-overlay" aria-hidden="true">
+    <div class="tech-modal" role="dialog" aria-labelledby="modal-orchid-title">
+      <div class="tech-modal-head">
+        <div>
+          <div class="modal-badge-group">
+            <span class="tech-modal-tag">PROJECT // CASE STUDY</span>
+            <span class="m-status-pill"><span class="m-dot"></span><span class="lang-en">ACTIVE SWARM</span><span class="lang-es">SWARM ACTIVO</span></span>
+          </div>
+          <h3 id="modal-orchid-title">orchid — Autonomous Multi-Agent Swarm</h3>
+        </div>
+        <button type="button" class="modal-close-btn" aria-label="close modal">✕</button>
+      </div>
+
+      <div class="tech-modal-body">
+        <p class="muted" style="margin-top:0"><span class="lang-en">Interactive vector blueprint of Orchid's multi-agent swarm architecture. Hover or click any node to inspect protocols, ports, and isolation boundaries.</span><span class="lang-es">Blueprint vectorial interactivo de la arquitectura multi-agente de Orchid. Pasá el cursor o hacé clic en cualquier nodo para inspeccionar protocolos y puertos.</span></p>
+
+        <div class="diagram-variant-switcher" role="tablist" aria-label="Diagram structure switcher">
+          <button type="button" class="dvar-btn is-active" data-variant="pipeline">
+            <span class="dvar-num">01.</span> <span class="lang-en">Swarm &amp; Egress Matrix</span><span class="lang-es">Matriz de Enjambre y Egress</span>
+          </button>
+          <button type="button" class="dvar-btn" data-variant="tiers">
+            <span class="dvar-num">02.</span> <span class="lang-en">Continuous Recon Loop</span><span class="lang-es">Bucle de Recon Continuo</span>
+          </button>
+          <button type="button" class="dvar-btn" data-variant="planes">
+            <span class="dvar-num">03.</span> <span class="lang-en">Control vs. Data Plane</span><span class="lang-es">Plano de Control vs. Datos</span>
+          </button>
+        </div>
+
+        <div class="orchid-variant-pane is-active" id="pane-orchid-pipeline">
+          <div class="svg-layer-filter-bar">
+            <span class="svg-layer-label">filter zone:</span>
+            <button type="button" class="svg-layer-btn is-active" data-svg-filter="all">all architecture</button>
+            <button type="button" class="svg-layer-btn" data-svg-filter="agent">Zone 1: agent sandboxes</button>
+            <button type="button" class="svg-layer-btn" data-svg-filter="proxy">Zone 2: egress proxy</button>
+            <button type="button" class="svg-layer-btn" data-svg-filter="gate">Zone 3: review &amp; sinks</button>
+          </div>
+
+          <div class="svg-diagram-wrap">
+            <svg viewBox="0 0 820 450" class="schematic-svg" aria-label="Orchid Swarm and Egress Matrix Blueprint">
+              <defs>
+                <marker id="arrow-orchid-m1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--accent)" />
+                </marker>
+              </defs>
+
+              <rect x="10" y="10" width="800" height="430" rx="6" class="svg-bg" />
+
+              <rect x="25" y="25" width="235" height="400" rx="6" class="svg-zone-box" data-layer="agent" />
+              <text x="35" y="42" class="svg-zone-title" data-layer="agent">ZONE 1 // DISPOSABLE AGENT RUNTIME</text>
+
+              <g class="svg-group-node" data-inspect="orchid-worker" data-layer="agent">
+                <rect x="35" y="55" width="215" height="98" rx="5" class="svg-node-rect" />
+                <text x="142" y="78" text-anchor="middle" class="svg-node-title">AGENT RUNTIME (agent-01..N)</text>
+                <text x="142" y="98" text-anchor="middle" class="svg-node-sub">flock /tmp/orchid-agent-&lt;id&gt;.lock</text>
+                <text x="142" y="116" text-anchor="middle" class="svg-node-sub">Single-Task Lifecycle Supervisor</text>
+                <text x="142" y="134" text-anchor="middle" class="svg-node-sub">Shell Env Forced Proxy Redirection</text>
+              </g>
+
+              <path d="M 142 153 L 142 178" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="agent" />
+
+              <g class="svg-group-node" data-inspect="orchid-browser" data-layer="agent">
+                <rect x="35" y="178" width="215" height="110" rx="5" class="svg-node-rect" />
+                <text x="142" y="202" text-anchor="middle" class="svg-node-title">DUAL BROWSER ISOLATION</text>
+                <text x="142" y="222" text-anchor="middle" class="svg-node-sub">browser-a (Victim) + browser-b (Attacker)</text>
+                <text x="142" y="240" text-anchor="middle" class="svg-node-sub">Parallel Playwright Session Contexts</text>
+                <text x="142" y="258" text-anchor="middle" class="svg-node-sub">Automated BOLA / IDOR Verification</text>
+                <text x="142" y="274" text-anchor="middle" class="svg-node-sub">storage_state.json Profile Store</text>
+              </g>
+
+              <path d="M 142 288 L 142 312" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="agent" />
+
+              <g class="svg-group-node" data-inspect="orchid-mail" data-layer="agent">
+                <rect x="35" y="312" width="215" height="98" rx="5" class="svg-node-rect" />
+                <text x="142" y="336" text-anchor="middle" class="svg-node-title">GAGGLE-MAIL MCP SINK</text>
+                <text x="142" y="356" text-anchor="middle" class="svg-node-sub">Remote Sink (@gaggle.land Inboxes)</text>
+                <text x="142" y="374" text-anchor="middle" class="svg-node-sub">x-orchid-secret Auth Header</text>
+                <text x="142" y="392" text-anchor="middle" class="svg-node-sub">Base64 Decode &amp; OTP Code Extract</text>
+              </g>
+
+              <path d="M 250 104 L 285 104" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="agent proxy" />
+              <text x="267" y="96" text-anchor="middle" class="svg-wire-text" data-layer="agent proxy">CONNECT</text>
+
+              <path d="M 250 233 L 285 233" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="agent proxy" />
+              <text x="267" y="225" text-anchor="middle" class="svg-wire-text" data-layer="agent proxy">traffic</text>
+
+              <rect x="285" y="25" width="245" height="400" rx="6" class="svg-zone-box" data-layer="proxy" />
+              <text x="295" y="42" class="svg-zone-title" data-layer="proxy">ZONE 2 // EGRESS PROXY (MITMPROXY :8080)</text>
+
+              <g class="svg-group-node" data-inspect="orchid-connect" data-layer="proxy">
+                <rect x="295" y="55" width="225" height="98" rx="5" class="svg-node-rect" />
+                <text x="407" y="78" text-anchor="middle" class="svg-node-title">CONNECT 407 TUNNEL AUTH</text>
+                <text x="407" y="98" text-anchor="middle" class="svg-node-sub">mitmproxy http_connect Hook</text>
+                <text x="407" y="116" text-anchor="middle" class="svg-node-sub">Pre-empts Chromium ERR_INVALID_AUTH</text>
+                <text x="407" y="134" text-anchor="middle" class="svg-node-sub">Strips Proxy-Authorization Header</text>
+              </g>
+
+              <path d="M 407 153 L 407 178" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="proxy" />
+
+              <g class="svg-group-node" data-inspect="orchid-tokenbucket" data-layer="proxy">
+                <rect x="295" y="178" width="225" height="110" rx="5" class="svg-node-rect" />
+                <text x="407" y="202" text-anchor="middle" class="svg-node-title">TWO-TIER TOKEN BUCKET</text>
+                <text x="407" y="222" text-anchor="middle" class="svg-node-sub">backend: Cap 8, Rate 2 req/s (Strict API)</text>
+                <text x="407" y="240" text-anchor="middle" class="svg-node-sub">static: Cap 60, Rate 30 req/s (Assets/DOM)</text>
+                <text x="407" y="258" text-anchor="middle" class="svg-node-sub">Globally Shared per (tier, netloc)</text>
+                <text x="407" y="274" text-anchor="middle" class="svg-node-sub">Prevents Host Anti-Abuse IP Bans</text>
+              </g>
+
+              <path d="M 407 288 L 407 312" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="proxy" />
+
+              <g class="svg-group-node" data-inspect="orchid-shaper" data-layer="proxy">
+                <rect x="295" y="312" width="225" height="98" rx="5" class="svg-node-rect" />
+                <text x="407" y="336" text-anchor="middle" class="svg-node-title">HARD FLOOR &amp; SOFT RULES</text>
+                <text x="407" y="356" text-anchor="middle" class="svg-node-sub">_apply_floor: 429 Retry-After Enforced</text>
+                <text x="407" y="374" text-anchor="middle" class="svg-node-sub">_apply_soft: Additive block | log_only</text>
+                <text x="407" y="392" text-anchor="middle" class="svg-node-sub">Debounced 2s Live Rule Hot-Reload</text>
+              </g>
+
+              <path d="M 520 233 L 555 233" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="proxy gate" />
+              <text x="537" y="225" text-anchor="middle" class="svg-wire-text" data-layer="proxy gate">egress</text>
+
+              <path d="M 520 361 L 555 361" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="proxy gate" />
+              <text x="537" y="353" text-anchor="middle" class="svg-wire-text" data-layer="proxy gate">staged</text>
+
+              <rect x="555" y="25" width="240" height="400" rx="6" class="svg-zone-box" data-layer="gate" />
+              <text x="565" y="42" class="svg-zone-title" data-layer="gate">ZONE 3 // REVIEW GATE &amp; TARGET SINKS</text>
+
+              <g class="svg-group-node" data-inspect="orchid-gate" data-layer="gate">
+                <rect x="565" y="55" width="220" height="98" rx="5" class="svg-node-rect" />
+                <text x="675" y="78" text-anchor="middle" class="svg-node-title">FINDINGS DRAFT CHECKLIST</text>
+                <text x="675" y="98" text-anchor="middle" class="svg-node-sub">findings_draft MCP Tool Only</text>
+                <text x="675" y="116" text-anchor="middle" class="svg-node-sub">Evidence-Referenced Checklist Gate</text>
+                <text x="675" y="134" text-anchor="middle" class="svg-node-sub">Self-XSS Dies · Cross-Account Proof</text>
+              </g>
+
+              <path d="M 675 153 L 675 178" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="gate" />
+
+              <g class="svg-group-node" data-inspect="orchid-gate" data-layer="gate">
+                <rect x="565" y="178" width="220" height="110" rx="5" class="svg-node-rect" />
+                <text x="675" y="202" text-anchor="middle" class="svg-node-title">HUMAN OPERATOR REVIEW</text>
+                <text x="675" y="222" text-anchor="middle" class="svg-node-sub">Strict Security Review Boundary</text>
+                <text x="675" y="240" text-anchor="middle" class="svg-node-sub">Zero Autonomous Report Dispatch</text>
+                <text x="675" y="258" text-anchor="middle" class="svg-node-sub">accepted ➔ Human PoC Export</text>
+                <text x="675" y="274" text-anchor="middle" class="svg-node-sub">rejected ➔ Fed Back as Dead-End</text>
+              </g>
+
+              <path d="M 675 288 L 675 312" class="svg-wire-animated" marker-end="url(#arrow-orchid-m1)" data-layer="gate" />
+
+              <g class="svg-group-node" data-inspect="orchid-target" data-layer="gate">
+                <rect x="565" y="312" width="220" height="98" rx="5" class="svg-node-rect" />
+                <text x="675" y="336" text-anchor="middle" class="svg-node-title">TARGET BOUNTY SCOPES</text>
+                <text x="675" y="356" text-anchor="middle" class="svg-node-sub">Authorized Bounty Sinks &amp; Endpoints</text>
+                <text x="675" y="374" text-anchor="middle" class="svg-node-sub">Injected X-Security-Research Header</text>
+                <text x="675" y="392" text-anchor="middle" class="svg-node-sub">All Outbound Flows Logged in SQLite</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="orchid-variant-pane" id="pane-orchid-tiers">
+          <div class="svg-diagram-wrap">
+            <svg viewBox="0 0 820 450" class="schematic-svg" aria-label="Orchid Continuous Recon Loop Blueprint">
+              <defs>
+                <marker id="arrow-orchid-m2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--accent)" />
+                </marker>
+              </defs>
+
+              <rect x="10" y="10" width="800" height="430" rx="6" class="svg-bg" />
+
+              <rect x="25" y="22" width="770" height="110" rx="6" class="svg-zone-box" />
+              <text x="35" y="38" class="svg-zone-title">TIER 1 // TASK LEDGER, SCOPE COMPILER &amp; ACCOUNT POOL (COORDINATOR :8000)</text>
+
+              <g class="svg-group-node" data-inspect="orchid-coord">
+                <rect x="35" y="48" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="155" y="74" text-anchor="middle" class="svg-node-title">TASK LIFECYCLE LEDGER</text>
+                <text x="155" y="93" text-anchor="middle" class="svg-node-sub">Hands Out Oldest Open Task</text>
+                <text x="155" y="108" text-anchor="middle" class="svg-node-sub">1800s Lease Timer &amp; Reaper Loop</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-accounts">
+                <rect x="290" y="48" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="410" y="74" text-anchor="middle" class="svg-node-title">DUAL-ACCOUNT CHECKOUT POOL</text>
+                <text x="410" y="93" text-anchor="middle" class="svg-node-sub">Cross-Account Test Credentials</text>
+                <text x="410" y="108" text-anchor="middle" class="svg-node-sub">Automated Check-in / Check-out</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-kb">
+                <rect x="545" y="48" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="665" y="74" text-anchor="middle" class="svg-node-title">TARGET SCOPE &amp; FLOOR COMPILER</text>
+                <text x="665" y="93" text-anchor="middle" class="svg-node-sub">shared/scope/&lt;target&gt;.yaml</text>
+                <text x="665" y="108" text-anchor="middle" class="svg-node-sub">Generates Active proxy/rules/floor.yaml</text>
+              </g>
+
+              <path d="M 155 122 L 155 168" class="svg-wire-animated" marker-end="url(#arrow-orchid-m2)" />
+              <path d="M 410 122 L 410 168" class="svg-wire-animated" marker-end="url(#arrow-orchid-m2)" />
+              <text x="282" y="148" text-anchor="middle" class="svg-wire-text">task_claim + category KB slices</text>
+
+              <rect x="25" y="168" width="770" height="110" rx="6" class="svg-zone-box" />
+              <text x="35" y="184" class="svg-zone-title">TIER 2 // SWARM EXECUTION, MODEL ROUTER &amp; LIVE TELEMETRY</text>
+
+              <g class="svg-group-node" data-inspect="orchid-gateway">
+                <rect x="35" y="194" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="155" y="220" text-anchor="middle" class="svg-node-title">LITELLM GATEWAY (:4000)</text>
+                <text x="155" y="239" text-anchor="middle" class="svg-node-sub">Tier 1 Pro (Claude 3.7 / Gemini Pro)</text>
+                <text x="155" y="254" text-anchor="middle" class="svg-node-sub">429 Failover ➔ Tier 2 Flash · $5 Budget</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-worker">
+                <rect x="290" y="194" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="410" y="220" text-anchor="middle" class="svg-node-title">DISPOSABLE AGENT SWARM</text>
+                <text x="410" y="239" text-anchor="middle" class="svg-node-sub">agent-01..N Execution Sandboxes</text>
+                <text x="410" y="254" text-anchor="middle" class="svg-node-sub">Pre-Seeded with Target Quirks &amp; OWASP</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-dash">
+                <rect x="545" y="194" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="665" y="220" text-anchor="middle" class="svg-node-title">TELEMETRY &amp; JOURNALS</text>
+                <text x="665" y="239" text-anchor="middle" class="svg-node-sub">Heartbeat Plugin (/heartbeat)</text>
+                <text x="665" y="254" text-anchor="middle" class="svg-node-sub">kb_contribute Writes Journal Entries</text>
+              </g>
+
+              <path d="M 410 268 L 410 314" class="svg-wire-animated" marker-end="url(#arrow-orchid-m2)" />
+              <path d="M 665 268 L 665 314" class="svg-wire-animated" marker-end="url(#arrow-orchid-m2)" />
+              <text x="537" y="294" text-anchor="middle" class="svg-wire-text">watermarked journal records past watermark</text>
+
+              <rect x="25" y="314" width="770" height="110" rx="6" class="svg-zone-box" />
+              <text x="35" y="330" class="svg-zone-title">TIER 3 // AUTONOMOUS LIBRARIAN DISTILLATION &amp; RECON GENERATOR</text>
+
+              <g class="svg-group-node" data-inspect="orchid-librarian">
+                <rect x="35" y="340" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="155" y="366" text-anchor="middle" class="svg-node-title">LIBRARIAN DISTILLATION</text>
+                <text x="155" y="385" text-anchor="middle" class="svg-node-sub">In-Process Scheduler (Runs Every 2h)</text>
+                <text x="155" y="400" text-anchor="middle" class="svg-node-sub">LLM Distills: quirk | dead_end | endpoint</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-kb">
+                <rect x="290" y="340" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="410" y="366" text-anchor="middle" class="svg-node-title">RECON TASK GENERATOR</text>
+                <text x="410" y="385" text-anchor="middle" class="svg-node-sub">Discovered Endpoints Auto-Mint Tasks</text>
+                <text x="410" y="400" text-anchor="middle" class="svg-node-sub">Dedupes against KB &amp; Hands to Ledger</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-db">
+                <rect x="545" y="340" width="240" height="74" rx="5" class="svg-node-rect" />
+                <text x="665" y="366" text-anchor="middle" class="svg-node-title">PERSISTENT KNOWLEDGE STORE</text>
+                <text x="665" y="385" text-anchor="middle" class="svg-node-sub">PostgreSQL 16 (:5433) + KB Markdown</text>
+                <text x="665" y="400" text-anchor="middle" class="svg-node-sub">Fingerprint Store &amp; Anti-Repetition Base</text>
+              </g>
+
+              <path d="M 35 377 L 18 377 L 18 85 L 35 85" class="svg-wire-animated" marker-end="url(#arrow-orchid-m2)" />
+              <text x="22" y="240" text-anchor="middle" class="svg-wire-text" transform="rotate(-90 22 240)">auto-minted recon tasks loop back</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="orchid-variant-pane" id="pane-orchid-planes">
+          <div class="svg-diagram-wrap">
+            <svg viewBox="0 0 820 450" class="schematic-svg" aria-label="Orchid Control vs Data Plane Blueprint">
+              <defs>
+                <marker id="arrow-orchid-m3" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--accent)" />
+                </marker>
+              </defs>
+
+              <rect x="10" y="10" width="800" height="430" rx="6" class="svg-bg" />
+
+              <rect x="25" y="25" width="365" height="400" rx="6" class="svg-zone-box" />
+              <text x="35" y="42" class="svg-zone-title">PLANE 1 // CONTROL &amp; POLICY PLANE (TRUSTED)</text>
+
+              <g class="svg-group-node" data-inspect="orchid-coord">
+                <rect x="37" y="55" width="341" height="80" rx="5" class="svg-node-rect" />
+                <text x="207" y="82" text-anchor="middle" class="svg-node-title">COORDINATOR SUPERVISOR (FastAPI :8000)</text>
+                <text x="207" y="101" text-anchor="middle" class="svg-node-sub">Task Claim Loop · flock /tmp/orchid-agent.lock</text>
+                <text x="207" y="117" text-anchor="middle" class="svg-node-sub">Agent Lease Reaper &amp; Status Telemetry Engine</text>
+              </g>
+
+              <path d="M 207 135 L 207 165" class="svg-wire-animated" marker-end="url(#arrow-orchid-m3)" />
+
+              <g class="svg-group-node" data-inspect="orchid-keys">
+                <rect x="37" y="165" width="341" height="74" rx="5" class="svg-node-rect" />
+                <text x="207" y="191" text-anchor="middle" class="svg-node-title">SPEND BUDGET CONTROLLER</text>
+                <text x="207" y="210" text-anchor="middle" class="svg-node-sub">Mints Per-Task Gateway Keys with $5.00 Hard Budget</text>
+                <text x="207" y="226" text-anchor="middle" class="svg-node-sub">Prevents Runaway Autonomous Model Costs</text>
+              </g>
+
+              <path d="M 207 239 L 207 269" class="svg-wire-animated" marker-end="url(#arrow-orchid-m3)" />
+
+              <g class="svg-group-node" data-inspect="orchid-kb">
+                <rect x="37" y="269" width="341" height="74" rx="5" class="svg-node-rect" />
+                <text x="207" y="295" text-anchor="middle" class="svg-node-title">KNOWLEDGE &amp; SCOPE COMPILER</text>
+                <text x="207" y="314" text-anchor="middle" class="svg-node-sub">Compiles Target Scope YAML into Proxy Floor Rules</text>
+                <text x="207" y="330" text-anchor="middle" class="svg-node-sub">Librarian Memory &amp; Historical Intelligence Store</text>
+              </g>
+
+              <path d="M 207 343 L 207 368" class="svg-wire-animated" marker-end="url(#arrow-orchid-m3)" />
+
+              <g class="svg-group-node" data-inspect="orchid-db">
+                <rect x="37" y="368" width="341" height="47" rx="5" class="svg-node-rect" />
+                <text x="207" y="388" text-anchor="middle" class="svg-node-title">POSTGRESQL 16 &amp; REDIS 7 STATE</text>
+                <text x="207" y="403" text-anchor="middle" class="svg-node-sub">ACID Task Queue Records · Live Telemetry Bus</text>
+              </g>
+
+              <path d="M 378 95 L 430 95" class="svg-wire-animated" marker-end="url(#arrow-orchid-m3)" />
+              <path d="M 378 202 L 430 202" class="svg-wire-animated" marker-end="url(#arrow-orchid-m3)" />
+              <path d="M 378 306 L 430 306" class="svg-wire-animated" marker-end="url(#arrow-orchid-m3)" />
+
+              <rect x="415" y="25" width="380" height="400" rx="6" class="svg-zone-box" />
+              <text x="425" y="42" class="svg-zone-title">PLANE 2 // DATA, SWARM &amp; EGRESS PLANE (ISOLATED)</text>
+
+              <g class="svg-group-node" data-inspect="orchid-worker">
+                <rect x="430" y="55" width="350" height="80" rx="5" class="svg-node-rect" />
+                <text x="605" y="82" text-anchor="middle" class="svg-node-title">DISPOSABLE AGENT SWARM (agent-01..N)</text>
+                <text x="605" y="101" text-anchor="middle" class="svg-node-sub">Isolated Agent Sandboxes · Ephemeral Mail Identity</text>
+                <text x="605" y="117" text-anchor="middle" class="svg-node-sub">Stealth Playwright Automation &amp; Cookie Jar Restore</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-gateway">
+                <rect x="430" y="165" width="350" height="74" rx="5" class="svg-node-rect" />
+                <text x="605" y="191" text-anchor="middle" class="svg-node-title">FAILOVER LLM GATEWAY (LiteLLM :4000)</text>
+                <text x="605" y="210" text-anchor="middle" class="svg-node-sub">Tier 1 Pro (Claude 3.7 / Gemini Pro) ➔ Tier 2 Flash</text>
+                <text x="605" y="226" text-anchor="middle" class="svg-node-sub">Automatic 429/5xx Retries &amp; Real-Time Spend Tracking</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-shaper">
+                <rect x="430" y="269" width="350" height="74" rx="5" class="svg-node-rect" />
+                <text x="605" y="295" text-anchor="middle" class="svg-node-title">EGRESS TRAFFIC SHAPER (mitmproxy :8080)</text>
+                <text x="605" y="314" text-anchor="middle" class="svg-node-sub">Centralized Token-Bucket Rate Limiting per Target Host</text>
+                <text x="605" y="330" text-anchor="middle" class="svg-node-sub">Injects Attribution X-Security-Research Headers</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="orchid-gate">
+                <rect x="430" y="368" width="350" height="47" rx="5" class="svg-node-rect" />
+                <text x="605" y="388" text-anchor="middle" class="svg-node-title">HUMAN-IN-THE-LOOP REVIEW GATE</text>
+                <text x="605" y="403" text-anchor="middle" class="svg-node-sub">findings_draft Staging Only · Mandatory Operator PoC Signoff</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="svg-node-inspector" id="orchid-inspector">
+          <div class="inspector-head">
+            <span class="inspector-title" id="orchid-insp-title">Coordinator Core (FastAPI :8000)</span>
+            <span class="inspector-port" id="orchid-insp-port">Port 8000</span>
+          </div>
+          <p class="inspector-desc" id="orchid-insp-desc">Task supervisor loop, flock lock management (/tmp/orchid-agent.lock), agent lease reaper, LiteLLM budget minting, and staging draft findings for human review.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-gaggle" class="tech-modal-overlay" aria-hidden="true">
+    <div class="tech-modal" role="dialog" aria-labelledby="modal-gaggle-title">
+      <div class="tech-modal-head">
+        <div>
+          <div class="modal-badge-group">
+            <span class="tech-modal-tag">PROJECT // CASE STUDY</span>
+            <span class="m-status-pill m-status-prod"><span class="m-dot"></span><span class="lang-en">PRODUCTION LIVE</span><span class="lang-es">PRODUCCIÓN EN VIVO</span></span>
+          </div>
+          <h3 id="modal-gaggle-title">gaggle — Social Media Platform &amp; CI/CD</h3>
+        </div>
+        <button type="button" class="modal-close-btn" aria-label="close modal">✕</button>
+      </div>
+
+      <div class="tech-modal-body">
+        <p class="muted" style="margin-top:0"><span class="lang-en">Comprehensive vector blueprint of Gaggle's architecture: from GitHub Actions CI/CD and Terraform AWS provisioning to the production EC2 Docker Compose runtime (Nginx, Go Chi, Postgres, Redis).</span><span class="lang-es">Blueprint vectorial de la arquitectura de Gaggle: desde CI/CD en GitHub Actions y Terraform en AWS hasta el runtime de Docker Compose en EC2 (Nginx, Go Chi, Postgres, Redis).</span></p>
+
+        <div class="svg-layer-filter-bar">
+          <span class="svg-layer-label">filter zone:</span>
+          <button type="button" class="svg-layer-btn is-active" data-svg-filter="all">all architecture</button>
+          <button type="button" class="svg-layer-btn" data-svg-filter="client">Zone 1: public client</button>
+          <button type="button" class="svg-layer-btn" data-svg-filter="cicd">Zone 2: CI/CD &amp; infra</button>
+          <button type="button" class="svg-layer-btn" data-svg-filter="host">Zone 3: AWS EC2 runtime</button>
+        </div>
+
+        <div class="svg-diagram-wrap">
+          <svg viewBox="0 0 820 450" class="schematic-svg" id="gaggle-svg-canvas" aria-label="Gaggle Architecture Blueprint">
+              <defs>
+                <marker id="arrow-gaggle" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--accent)" />
+                </marker>
+              </defs>
+
+              <rect x="10" y="10" width="800" height="430" rx="6" class="svg-bg" />
+
+              <rect x="25" y="25" width="215" height="110" rx="6" class="svg-zone-box" data-layer="client" />
+              <text x="35" y="42" class="svg-zone-title" data-layer="client">ZONE 1 // CLIENT &amp; INGRESS</text>
+
+              <g class="svg-group-node" data-inspect="gaggle-client" data-layer="client">
+                <rect x="35" y="55" width="195" height="65" rx="5" class="svg-node-rect" />
+                <text x="132" y="78" text-anchor="middle" class="svg-node-title">WEB CLIENT (React 18 + TS)</text>
+                <text x="132" y="96" text-anchor="middle" class="svg-node-sub">Vite SPA · Browser Runtime</text>
+                <text x="132" y="110" text-anchor="middle" class="svg-node-sub">SSE EventSource · HttpOnly Auth</text>
+              </g>
+
+              <path d="M 230 85 L 330 85" class="svg-wire-animated" marker-end="url(#arrow-gaggle)" data-layer="client host" />
+              <text x="280" y="77" text-anchor="middle" class="svg-wire-text" data-layer="client host">HTTPS :443</text>
+
+              <rect x="25" y="150" width="215" height="275" rx="6" class="svg-zone-box" data-layer="cicd" />
+              <text x="35" y="167" class="svg-zone-title" data-layer="cicd">ZONE 2 // CI/CD &amp; INFRA PIPELINE</text>
+
+              <g class="svg-group-node" data-inspect="gaggle-dev" data-layer="cicd">
+                <rect x="35" y="178" width="195" height="50" rx="5" class="svg-node-rect" />
+                <text x="132" y="198" text-anchor="middle" class="svg-node-title">GIT REPOSITORY</text>
+                <text x="132" y="215" text-anchor="middle" class="svg-node-sub">main branch webhook trigger</text>
+              </g>
+
+              <path d="M 132 228 L 132 248" class="svg-wire-animated" marker-end="url(#arrow-gaggle)" data-layer="cicd" />
+              <text x="140" y="240" text-anchor="start" class="svg-wire-text" data-layer="cicd">webhook</text>
+
+              <g class="svg-group-node" data-inspect="gaggle-ci" data-layer="cicd">
+                <rect x="35" y="248" width="195" height="65" rx="5" class="svg-node-rect" />
+                <text x="132" y="269" text-anchor="middle" class="svg-node-title">GITHUB ACTIONS CI</text>
+                <text x="132" y="286" text-anchor="middle" class="svg-node-sub">ci.yml · Ephemeral PG16 &amp; Redis7</text>
+                <text x="132" y="300" text-anchor="middle" class="svg-node-sub">go test ./... &amp; Node 24 build</text>
+              </g>
+
+              <path d="M 132 313 L 132 333" class="svg-wire-animated" marker-end="url(#arrow-gaggle)" data-layer="cicd" />
+              <text x="140" y="325" text-anchor="start" class="svg-wire-text" data-layer="cicd">deploy.yml</text>
+
+              <g class="svg-group-node" data-inspect="gaggle-cd" data-layer="cicd">
+                <rect x="35" y="333" width="195" height="78" rx="5" class="svg-node-rect" />
+                <text x="132" y="353" text-anchor="middle" class="svg-node-title">TERRAFORM &amp; CD DEPLOY</text>
+                <text x="132" y="370" text-anchor="middle" class="svg-node-sub">infra/main.tf ➔ AWS EC2 AL2023</text>
+                <text x="132" y="384" text-anchor="middle" class="svg-node-sub">VPC Security Group (22/80/443)</text>
+                <text x="132" y="398" text-anchor="middle" class="svg-node-sub">SSH apply.sh ➔ Docker Stack</text>
+              </g>
+
+              <path d="M 230 372 L 310 372" class="svg-wire-animated" marker-end="url(#arrow-gaggle)" data-layer="cicd host" />
+              <text x="270" y="364" text-anchor="middle" class="svg-wire-text" data-layer="cicd host">apply.sh</text>
+
+              <rect x="310" y="25" width="485" height="400" rx="6" class="svg-zone-box" data-layer="host" />
+              <text x="320" y="42" class="svg-zone-title" data-layer="host">ZONE 3 // AWS EC2 PRODUCTION HOST (DOCKER COMPOSE)</text>
+
+              <g class="svg-group-node" data-inspect="gaggle-nginx" data-layer="host">
+                <rect x="330" y="55" width="445" height="65" rx="5" class="svg-node-rect" />
+                <text x="552" y="78" text-anchor="middle" class="svg-node-title">NGINX REVERSE PROXY (:443 / :80)</text>
+                <text x="552" y="96" text-anchor="middle" class="svg-node-sub">TLS 1.3 Termination (Certbot) · Static Asset Caching</text>
+                <text x="552" y="110" text-anchor="middle" class="svg-node-sub">Reverse proxy pass /api/* &amp; SSE streams to :8080</text>
+              </g>
+
+              <path d="M 552 120 L 552 155" class="svg-wire-animated" marker-end="url(#arrow-gaggle)" data-layer="host" />
+              <text x="562" y="140" text-anchor="start" class="svg-wire-text" data-layer="host">proxy_pass :8080</text>
+
+              <g class="svg-group-node" data-inspect="gaggle-api" data-layer="host">
+                <rect x="345" y="155" width="415" height="85" rx="5" class="svg-node-rect" />
+                <text x="552" y="178" text-anchor="middle" class="svg-node-title">CORE BACKEND API (Go Chi :8080)</text>
+                <text x="552" y="197" text-anchor="middle" class="svg-node-sub">JWT Access + HttpOnly Refresh Cookie Rotation</text>
+                <text x="552" y="213" text-anchor="middle" class="svg-node-sub">Real-Time SSE Event Broker Engine</text>
+                <text x="552" y="227" text-anchor="middle" class="svg-node-sub">Keyset Cursor Feeds &amp; Token-Bucket Rate Limiter</text>
+              </g>
+
+              <path d="M 435 240 L 435 270 L 415 270 L 415 285" class="svg-wire-animated" marker-end="url(#arrow-gaggle)" data-layer="host" />
+              <path d="M 670 240 L 670 270 L 690 270 L 690 285" class="svg-wire-animated" marker-end="url(#arrow-gaggle)" data-layer="host" />
+              <text x="400" y="263" text-anchor="middle" class="svg-wire-text" data-layer="host">SQL CRUD</text>
+              <text x="705" y="263" text-anchor="middle" class="svg-wire-text" data-layer="host">PubSub / Cache</text>
+
+              <g class="svg-group-node" data-inspect="gaggle-postgres" data-layer="host">
+                <rect x="325" y="285" width="220" height="110" rx="5" class="svg-node-rect" />
+                <text x="435" y="308" text-anchor="middle" class="svg-node-title">POSTGRESQL 16 (:5432)</text>
+                <text x="435" y="326" text-anchor="middle" class="svg-node-sub">ACID Relational Persistence</text>
+                <text x="435" y="342" text-anchor="middle" class="svg-node-sub">Startup Auto-Migrations</text>
+                <text x="435" y="358" text-anchor="middle" class="svg-node-sub">Users, Posts, Replies, Bookmarks</text>
+                <text x="435" y="374" text-anchor="middle" class="svg-node-sub">Persistent EBS Volume Storage</text>
+              </g>
+
+              <g class="svg-group-node" data-inspect="gaggle-redis" data-layer="host">
+                <rect x="560" y="285" width="220" height="110" rx="5" class="svg-node-rect" />
+                <text x="670" y="308" text-anchor="middle" class="svg-node-title">REDIS 7 CACHE &amp; BUS (:6379)</text>
+                <text x="670" y="326" text-anchor="middle" class="svg-node-sub">Real-Time Event Fan-Out</text>
+                <text x="670" y="342" text-anchor="middle" class="svg-node-sub">Home Feed Timeline Cache</text>
+                <text x="670" y="358" text-anchor="middle" class="svg-node-sub">Rate Limit Sliding-Window Store</text>
+                <text x="670" y="374" text-anchor="middle" class="svg-node-sub">In-Memory Session Store</text>
+              </g>
+            </svg>
+          </div>
+
+        <div class="svg-node-inspector" id="gaggle-inspector">
+          <div class="inspector-head">
+            <span class="inspector-title" id="gaggle-insp-title">Git Repo &amp; CI/CD Webhook Trigger</span>
+            <span class="inspector-port" id="gaggle-insp-port">GitHub Actions</span>
+          </div>
+          <p class="inspector-desc" id="gaggle-insp-desc">Pushes to main trigger parallel integration testing (Go vet &amp; test with PostgreSQL 16 and Redis 7 containers; Node 24 frontend lint and build) followed by concurrency-locked deployment to AWS EC2 via deploy/apply.sh.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/lang.js"></script>
+</body>
+</html>
